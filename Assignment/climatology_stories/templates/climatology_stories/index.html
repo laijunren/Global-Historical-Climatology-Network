@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Climate Data Site</title>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
+    </head>
+    <body>
+        {% include 'common/nav.html' %}
+        <div class="container mt-5">
+            <h2>Welcome to Climate Data Site</h2>
+            <p>This website is a Django project built on open data from kaggle.com. The Aim of this website development project is to visualize climate data on temperature changes by year and at different longitude and latitude. This website makes the dataset easilly accessible and allows for comparing values within the site</p>
+            <hr/>
+            <h2>About Dataset</h2>
+            <p>Global Historical Climatology Network-Monthly (GHCN-M)</p>
+            <hr/>
+            <h2>Context</h2>
+            <p>
+                Global Historical Climatology Network (GHCN) is an integrated database of climate summaries from land surface stations across the globe. This data set contains gridded mean temperature anomalies, or departures from a reference value or long-term average, from the Global Historical Climatology Network-Monthly (GHCN-M) version 3.2.1 temperature data set. The gridded anomalies were produced from GHCN-M bias corrected data. Each month of data consists of 2,592 gridded data points produced on a 5° by 5° basis for the entire globe (72 longitude by 36 latitude grid boxes).
+            </p>
+            <ul>
+                <li>Frequency: Monthly</li>
+                <li>Period: 1880 to 2016</li>
+            </ul>
+            <h2>Content</h2>
+            <p>
+                Gridded data for every month from January 1880 to the most recent month is available. The data are temperature anomalies in degrees Celsius. Each gridded value was multiplied by 100 and written to file as an integer. Missing values are represented by the value -9999.
+                The data are formatted by year, month, latitude and longitude. There are 72 longitude grid values per line -- each grid is labeled as a concatenation of "lon", "w" or "e", then the degree. The latitude is captured in the "lat" field where the value indicates the lower bound of a grid cell (e.g. 85 indicates 85-90N whereas -90 indicates 85-90S). Longitude values are written from 180°W to 180°E, and latitude values from 90°N to 90°S.
+                This dataset permits the quantification of changes in the mean monthly temperature and precipitation for the earth's surface. Changes in the observing system itself have been carefully removed to allow for the true climate variability at the earth's surface to be represented in the data.
+                Many surface weather stations undergo minor relocations through their history of observation. Stations may also be subject to changes in instrumentation as measurement technology evolves. Further, the land use/land cover in the vicinity of an observing site may also change with time. Such modifications to an observing site have the potential to alter a thermometer's microclimate exposure characteristics and/or change the bias of measurements, the impact of which can be a systematic shift in the mean level of temperature readings that is unrelated to true climate variations. The process of removing such "non-climatic" artifacts in a climate time series is called homogenization.
+                In version 3 of the GHCN-Monthly temperature data, the apparent impacts of documented and undocumented inhomogeneities are detected and removed through automated pairwise comparisons of mean monthly temperature series as detailed in Menne and Williams [2009].
+            </p>
+            <h2>Inspiration</h2>
+            <p>
+                This granular dataset permits extensive historical analysis of the earth’s climate to answer questions about climate change, including how different regions of the planet have been affected by changes in temperature over time. Get started by forking the kernel Mapping Historical Temperature Anomalies with R.
+                The hottest and coldest months since 1880
+            </p>
+            <h2>Acknowledgements</h2>
+            <p>
+                This data is a product of NOAA's National Centers for Environmental Information (NCEI). It was compiled through the aggregation and analysis of many thousands of weather station records. The compete description of the processes and methods used may be found at https://www.ncdc.noaa.gov/ghcnm/v3.php.
+                The Global Historical Climatology Network-Monthly (GHCN-M) temperature dataset was first developed in the early 1990s (Vose et al. 1992). A second version was released in 1997 following extensive efforts to increase the number of stations and length of the data record (Peterson and Vose, 1997). Methods for removing inhomogeneities from the data record associated with non-climatic influences such as changes in instrumentation, station environment, and observing practices that occur over time were also included in the version 2 release (Peterson and Easterling, 1994; Easterling and Peterson 1995). Since that time efforts have focused on continued improvements in dataset development methods including new quality control processes and advanced techniques for removing data inhomogeneities (Menne and Williams, 2009).
+            </p>
+            <h2>License</h2>
+            <p>Public Domain License</p>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.min.js"></script>
+    </body>
+</html>

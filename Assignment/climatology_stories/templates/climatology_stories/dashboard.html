@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Climate Data Admin Panel</title>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
+        <link rel="stylesheet"
+              href="https://unpkg.com/leaflet@1.7.1/dist/leaflet.css"
+              integrity="sha512-xodZBNTC5n17Xt2atTPuE1HxjVMSvLVW9ocqUKLsCC5CXdbqCmblAshOMAS6/keqq/sMZMZ19scR4PsZChSR7A=="
+              crossorigin=""/>
+        <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"
+                integrity="sha512-XQoYMqMTK8LvdxXYG3nZ448hOEQiglfqkJs1NOQV44cWnUrBc8PkAOcXy20w0vlaXaVUearIOBhiXZ5V3ynxwA=="
+                crossorigin=""></script>
+        {% comment %} <style>
+        body {
+            background-color: #f5f5f5;
+        }
+        .container {
+            margin-top: 30px;
+        }
+        .card {
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            border: none;
+        }
+        .card-header {
+            background-color: #fff;
+            border-bottom: 1px solid #e9e9e9;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .card-body {
+            padding: 30px;
+        }
+        h2 {
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .chart-container {
+            height: 400px;
+            margin-top: 30px;
+        }
+        .chart-title {
+            font-size: 24px;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
+        </style> {% endcomment %}
+    </head>
+    <body>
+        {% include 'common/nav.html' %}
+        <div class="container mt-5">
+            <div class="row">
+                <form action="{% url 'dashboard' %}" method="post">
+                    <div class="col-12" style="margin-bottom:25px;">
+                        {% csrf_token %}
+                        <label style="margin-right:5px;">Year:</label>
+                        <select class="form-select-sm"
+                                id="year"
+                                name="year"
+                                style="margin-right:20px">
+                            {% for year in years %}
+                                <option value="{{ year }}">
+                                    {{ year }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <label style="margin-right:5px;">Month:</label>
+                        <select class="form-select-sm"
+                                id="month"
+                                name="month"
+                                style="margin-right:20px">
+                            {% for month in months %}
+                                <option value="{{ month }}">
+                                    {{ month }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <label style="margin-right:5px;">Latitude:</label>
+                        <select class="form-select-sm" id="lat" name="lat" style="margin-right:20px">
+                            {% for lat in lats %}
+                                <option value="{{ lat }}">
+                                    {{ lat }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <!-- <button class="btn-sm btn-dark"
+         type="submit"
+         style="background-color: rgba(0, 0, 255, 1)">Submit</button> -->
+                    </div>
+                    <div class="col-12" style="margin-bottom:5px;">
+                        <label style="margin-right:5px;">Year:</label>
+                        <select class="form-select-sm"
+                                id="year2"
+                                name="year2"
+                                style="margin-right:20px">
+                            {% for year in years %}
+                                <option value="{{ year }}">
+                                    {{ year }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <label style="margin-right:5px;">Month:</label>
+                        <select class="form-select-sm"
+                                id="month2"
+                                name="month2"
+                                style="margin-right:20px">
+                            {% for month in months %}
+                                <option value="{{ month }}">
+                                    {{ month }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <label style="margin-right:5px;">Latitude:</label>
+                        <select class="form-select-sm"
+                                id="lat2"
+                                name="lat2"
+                                style="margin-right:20px">
+                            {% for lat in lats %}
+                                <option value="{{ lat }}">
+                                    {{ lat }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                        <button class="btn-sm btn-dark" type="submit">Compare</button>
+                        <!-- style="background-color: rgb(114, 47, 55);" -->
+                    </div>
+                </form>
+                <div class="col-12">
+                    <p>
+                        <b>Note: -99 or -9999 means no data available. Example of latitudes with valid data: 35-40S, 50-55S, 40-45S, 15-20S.</b>
+                    </p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h2>Climate Data</h2>
+                        </div>
+                        <div class="card-body">
+                            <h4>Monthly Average Temperature</h4>
+                            <div class="chart-container">
+                                <canvas id="myChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <div class="card">
+                        <div class="card-header">
+                            <h4>World Map</h4>
+                        </div>
+                        <div class="card-body">
+                            <div id="map" style="width: 100%; height: 300px;"></div>
+                        </div>
+                    </div>
+                    <script>
+    // Initialize the map
+    const map = L.map('map').setView([51.505, -0.09], 2);
+
+    // Set map tiles
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
+    }).addTo(map);
+
+    // Click event listener
+    map.on('click', function (e) {
+        const lat = e.latlng.lat;
+        const lng = e.latlng.lng;
+        
+        // You can use the latitude and longitude to fetch temperature data for the clicked location
+        // For example:
+        // fetchTemperatureData(lat, lng);
+
+        alert("Latitude: " + lat + "\nLongitude: " + lng);
+    });
+                    </script>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="card">
+                            <div class="card-header">
+                                <h4>Climate Data Table</h4>
+                            </div>
+                            <div class="card-body">
+                                <table class="table table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Year_ID</th>
+                                            <th>Year</th>
+                                            <th>Month</th>
+                                            <th>Latitude</th>
+                                            <th>Lon_175_180W</th>
+                                            <th>Lon_170_175W</th>
+                                            <th>Lon_165_170W</th>
+                                            <th>Lon_160_165W</th>
+                                            <th style="word-wrap: break-word">Lon_155_160W</th>
+                                            <th>Lon_150_155W</th>
+                                            {% comment %} <th>Lon_145_150W</th>
+                    <th>Lon_140_145W</th>
+                    <th>Lon_135_140W</th>
+                                            <th>Lon_130_135W</th> {% endcomment %}
+                                            <!-- <th>Temperature</th> -->
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr>
+                                            <td>
+                                                {{ climate.year_ID.ID }}
+                                            </td>
+                                            <td>
+                                                {{ climate.year }}
+                                            </td>
+                                            <td>
+                                                {{ climate.month }}
+                                            </td>
+                                            <td>
+                                                {{ climate.lat }}
+                                            </td>
+                                            <td>
+                                                {{ climate.lon_175_180W }}
+                                            </td>
+                                            <td>
+                                                {{ climate.lon_170_175W }}
+                                            </td>
+                                            <td>
+                                                {{ climate.lon_165_170W }}
+                                            </td>
+                                            <td>
+                                                {{ climate.lon_160_165W }}
+                                            </td>
+                                            <td>
+                                                {{ climate.lon_155_160W }}
+                                            </td>
+                                            <td>
+                                                {{ climate.lon_150_155W }}
+                                            </td>
+                                            {% comment %} <td>{{climate.lon_145_150W}}</td>
+                        <td>{{climate.lon_140_145W}}</td>
+                        <td>{{climate.lon_135_140W}}</td>
+                                            <td>{{climate.lon_130_135W}}</td> {% endcomment %}
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                {{ climate2.year_ID.ID }}
+                                            </td>
+                                            <td>
+                                                {{ climate2.year }}
+                                            </td>
+                                            <td>
+                                                {{ climate2.month }}
+                                            </td>
+                                            <td>
+                                                {{ climate2.lat }}
+                                            </td>
+                                            <td>
+                                                {{ climate2.lon_175_180W }}
+                                            </td>
+                                            <td>
+                                                {{ climate2.lon_170_175W }}
+                                            </td>
+                                            <td>
+                                                {{ climate2.lon_165_170W }}
+                                            </td>
+                                            <td>
+                                                {{ climate2.lon_160_165W }}
+                                            </td>
+                                            <td>
+                                                {{ climate2.lon_155_160W }}
+                                            </td>
+                                            <td>
+                                                {{ climate2.lon_150_155W }}
+                                            </td>
+                                            {% comment %} <td>{{climate.lon_145_150W}}</td>
+                        <td>{{climate.lon_140_145W}}</td>
+                        <td>{{climate.lon_135_140W}}</td>
+                                            <td>{{climate.lon_130_135W}}</td> {% endcomment %}
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+            <script>
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+        type: 'line',
+            data: {
+                labels: ['lon_175_180W', 'lon_170_175W', 'lon_165_170W', 'lon_160_165W', 'lon_155_160W', 'Lon_150_155W' ],
+                datasets: [
+                    {
+                    label: 'Temperature One (°C)',
+                    data: [{{climate.lon_175_180W}}, {{climate.lon_170_175W}}, {{climate.lon_165_170W}}, {{climate.lon_160_165W}}, {{climate.lon_155_160W}}, {{climate.lon_150_155W}},],
+                    borderColor: 'rgba(0, 0, 255, 1)',
+                    backgroundColor: 'rgba(0, 0, 255, 0.1)',
+                    borderWidth: 1
+                    },
+
+                    {
+                    label: 'Temperature Two (°C)',
+                    data: [{{climate2.lon_175_180W}}, {{climate2.lon_170_175W}}, {{climate2.lon_165_170W}}, {{climate2.lon_160_165W}}, {{climate2.lon_155_160W}}, {{climate2.lon_150_155W}},],
+                    borderColor: 'rgb(114, 47, 55)',
+                    backgroundColor: 'rgb(114, 47, 55)',
+                    borderWidth: 1
+                    }
+                ]
+            },
+        options: {
+        scales: {
+        y: {
+        beginAtZero: true
+        }
+        }
+        }
+        });
+            </script>
+        </body>
+    </html>

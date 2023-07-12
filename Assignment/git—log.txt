@@ -1,0 +1,78 @@
+* 2ab75064 : Added functionality in Settings
+*   72b9fd87 : add dashboard page
+|\  
+| * 3f7018cb : full data parsed
+| * 64d86007 : loading full data csv
+| * aa1647e1 : Relational Database Setup
+* | e85dfff9 : add dashboard page
+|/  
+* c0eeb8b2 : Test Passed
+* 2617c9e7 : Recent update
+* dbf2e4b8 : add html files
+* be56114f : testing we have the right username
+* 80ee6dc1 : data loaded to index page
+* b5f21682 : data model
+* 02768d3f : add Data
+* b93598d3 : Add Documentation
+* a5f28469 : add .ravi
+* 57f21a29 : test restore
+* e03ec733 : include all allowed host
+* 196e2ca1 : modified
+*   9e499a6d : Merge branch 'main' of github.com:IbiOgan/groupIndia into main
+|\  
+| * b3757668 : store
+| * 1be0035c : Update Test.txt
+| *   dcaf1522 : oh well
+| |\  
+| | * 7121a0b6 : Update Test.txt
+| * | 1c953bd8 : lets go
+| |/  
+| * 824dfee8 : Update Test.txt
+| * cbce72ef : will it work
+| * e51b658b : Update Test.txt
+| * c76f6be1 : ini
+| *   c0d3b223 : Merge branch 'main' of github.com:IbiOgan/groupIndia into main
+| |\  
+| | *   b19a1105 : Merge branch 'main' of github.com:IbiOgan/groupIndia into main
+| | |\  
+| | * | a90a6488 : initial
+| * | | fab8c9d1 : test
+| | |/  
+| |/|   
+| * |   a360c998 : Test commit
+| |\ \  
+| | |/  
+| | *   9995a9c4 : merged
+| | |\  
+| | * | 9d157d12 : merged
+| * | | 30d692c2 : my changes
+| | |/  
+| |/|   
+| * |   4af5952f : merged
+| |\ \  
+| | |/  
+| | *   13b48b15 : merge Merge branch 'main' of github.com:IbiOgan/groupIndia into main
+| | |\  
+| | | *   a1418fc8 : added name
+| | | |\  
+| | | * | 17cdbc7f : Emmanuel
+| | * | |   15ef4618 : Merge branch 'main' of github.com:IbiOgan/groupIndia into main
+| | |\ \ \  
+| | | | |/  
+| | | |/|   
+| | * | | d6f3b3f7 : added test text
+| | | |/  
+| | |/|   
+| * | | 88fad871 : merge
+| | |/  
+| |/|   
+| * | bd18e3c2 : changed file
+| |/  
+* | 90b22269 : html pages build
+|/  
+* f1fe3aa2 : Update Test.txt
+* 5e63fa52 : Update Test.txt
+* 0f95cf45 : Update Test.txt
+* 5384ed7f : Update Test.txt
+* 507579e7 : Create Test.txt
+* 025bd31e : Initial commit

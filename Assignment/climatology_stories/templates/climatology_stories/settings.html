@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Climate Data Admin Panel - Settings</title>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
+    </head>
+    <body>
+        {% include 'common/nav.html' %}
+        <div class="container mt-5">
+            <h1>Settings</h1>
+            <!-- Add your settings content here -->
+            <div class="row">
+                <div class="col-md-6">
+                    <h2>Download Data</h2>
+                    <p>Download data for a specific year:</p>
+                    <form method="get" action="/download">
+                        <div class="input-group mb-3">
+                            <input type="text" class="form-control" name="year" placeholder="Enter year (Number Value)">
+                            <button class="btn btn-primary" type="submit">Download</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

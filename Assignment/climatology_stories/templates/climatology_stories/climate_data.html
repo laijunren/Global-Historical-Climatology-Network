@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Climate Data</title>
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css">
+        <link rel="stylesheet"
+              href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/css/bootstrap.min.css">
+    </head>
+    <body>
+        {% include 'common/nav.html' %}
+        <div class="container mt-5">
+            <h1>Climate Data</h1>
+            <p>This view handles climate data-related logic, such as displaying climate data records.</p>
+            <p>
+                <b>Note: -99 or -9999 means no data available.</b>
+            </p>
+            <!-- Add your climate data related content here -->
+            <hr>
+            <div class="row">
+                <div class="col-4">
+                    <div class="input-group mb-3">
+                        <form action="{% url 'climate_data' %}" method="get">
+                            <div class="input-group">
+                                <input type="text"
+                                       class="form-control"
+                                       placeholder="Search by Year..."
+                                       name="year">
+                                <button class="btn btn-primary" type="submit">
+                                    <i class="fas fa-search"></i>
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+                <div class="col-8 text-end">
+                    <button class="btn btn-success"
+                            type="button"
+                            onclick="window.location.href={% url 'dashboard' %}">
+                        <i class="fas fa-plus"></i> Compare
+                    </button>
+                </div>
+            </div>
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th>Year_ID</th>
+                        <th>Year</th>
+                        <th>Month</th>
+                        <th>Latitude</th>
+                        <th>Lon_175_180W</th>
+                        <th>Lon_170_175W</th>
+                        <th>Lon_165_170W</th>
+                        <th>Lon_160_165W</th>
+                        <th style="word-wrap: break-word">Lon_155_160W</th>
+                        <th>Lon_150_155W</th>
+                        {% comment %} <th>Lon_145_150W</th>
+                    <th>Lon_140_145W</th>
+                    <th>Lon_135_140W</th>
+                        <th>Lon_130_135W</th> {% endcomment %}
+                        <!-- <th>Temperature</th> -->
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for climate in page_obj %}
+                        <tr>
+                            <td>{{ climate.year_ID.ID }}</td>
+                            <td>{{ climate.year }}</td>
+                            <td>{{ climate.month }}</td>
+                            <td>{{ climate.lat }}</td>
+                            <td>{{ climate.lon_175_180W }}</td>
+                            <td>{{ climate.lon_170_175W }}</td>
+                            <td>{{ climate.lon_165_170W }}</td>
+                            <td>{{ climate.lon_160_165W }}</td>
+                            <td>
+                                {{ climate.lon_155_160W }}
+                            </td>
+                            <td>
+                                {{ climate.lon_150_155W }}
+                            </td>
+                            {% comment %} <td>{{climate.lon_145_150W}}</td>
+                        <td>{{climate.lon_140_145W}}</td>
+                        <td>{{climate.lon_135_140W}}</td>
+                            <td>{{climate.lon_130_135W}}</td> {% endcomment %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <nav aria-label="Page navigation">
+                <ul class="pagination justify-content-center">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page=1{% if year %}&year={{ year }}{% endif %}">First</a>
+                        </li>
+                        <li class="page-item ">
+                            <a class="page-link"
+                               href="?page={{ page_obj.previous_page_number }}{% if year %}&year={{ year }}{% endif %}"
+                               tabindex="-1"
+                               aria-disabled="true">Previous</a>
+                        </li>
+                    {% else %}
+                        <li class="page-item disabled">
+                            <a class="page-link" href="" tabindex="-1" aria-disabled="true">Previous</a>
+                        </li>
+                    {% endif %}
+                    {% comment %} <li class="page-item">
+                        <a class="page-link" href="#">2</a>
+                    </li>
+                    <li class="page-item">
+                        <a class="page-link" href="#">3</a>
+                    </li> {% endcomment %}
+                    {% if page_obj.has_next %}
+                        <li class="page-item">
+                            <a class="page-link"
+                               href="?page={{ page_obj.next_page_number }}{% if year %}&year={{ year }}{% endif %}">Next</a>
+                        </li>
+                    {% endif %}
+                </ul>
+                <div style="text-align: center;">
+                    <p>
+                        Showing {{ page_obj.start_index }} to {{ page_obj.end_index }} of {{ page_obj.paginator.count }} entries.
+                    </p>
+                    <p>
+                        Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}.
+                    </p>
+                </div>
+            </nav>
+        </div>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.9.3/umd/popper.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.0.2/js/bootstrap.min.js"></script>
+    </body>
+</html>
